@@ -1,0 +1,59 @@
+import random
+import time
+
+
+
+
+
+class Boneco:
+    def __init__(self, nome, vida, ataque_basico, dano_skill, dano_ult, cooldown_skill, cooldown_ult):
+        self.nome = nome
+        self.vida = vida
+        self.ataque_basico = ataque_basico
+        self.dano_skill = dano_skill
+        self.dano_ult = dano_ult
+        self.cooldown_skill = cooldown_skill
+        self.cooldown_ult = cooldown_ult
+        self.ultima_skill = -cooldown_skill  
+        self.ultima_ult = -cooldown_ult
+        
+    def atacar(self, inimigo, tempo_atual):
+        if tempo_atual - self.ultima_ult >= self.cooldown_ult:
+            print(f"{self.nome} usa ultimate em {inimigo.nome} causando {self.dano_skill} de dano!")
+            inimigo.vida -= self.dano_ult
+            self.ultima_ult = tempo_atual
+        elif tempo_atual - self.ultima_skill >= self.cooldown_skill:
+            print(f"{self.nome} usa uma skill em {inimigo.nome} causando {self.dano_skill} de dano!!!")
+            inimigo.vida -= self.dano_skill
+            self.ultima_skill = tempo_atual
+        else:
+            print(f"{self.nome} deu ataque basico em {inimigo.nome} causando {self.ataque_basico} de dano ao inimigo!!")
+            inimigo.vida -= self.ataque_basico
+    
+def luta(rengar, ryze):
+    tempo = 0
+    intervalo_tempo = 1
+    
+    while rengar.vida > 0 and ryze.vida > 0:
+        if random.choice ([True, False]):
+            rengar.atacar(ryze, tempo)
+        else:
+            ryze.atacar(rengar, tempo)
+        
+        
+        
+        print(f"Status:{rengar.nome} (vida:{rengar.vida}) vs {ryze.nome}(Vida: {ryze.vida})\n")
+        tempo += intervalo_tempo
+        time.sleep(intervalo_tempo)
+        
+    if rengar.vida <= 0 and ryze.vida <= 0:
+        print("Ambos os campeões morreram ao mesmo tempo!")
+    elif rengar.vida <= 0:
+        print(f"{ryze.nome} venceu a luta!")
+    else:
+        print(f"{rengar.nome} venceu a luta!")
+    
+rengar = Boneco(nome="Rengar",vida=1000, ataque_basico=80, dano_skill=150, dano_ult=300, cooldown_skill=1.5,cooldown_ult=5)
+ryze = Boneco(nome="Ryze",vida=950, ataque_basico=70,dano_skill=700, dano_ult=300, cooldown_skill=1.5, cooldown_ult=5)
+
+luta(rengar ,ryze)
